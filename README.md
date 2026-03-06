@@ -53,7 +53,7 @@ sudo apt install build-essential libglfw3-dev libgl1-mesa-dev
 
 ```
 git clone https://github.com/engalaagabr/CPP-GUI-Stopwatch.git
-cd cpp-stopwatch
+cd CPP-GUI-Stopwatch
 ```
 
 ## Build
