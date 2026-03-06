@@ -13,154 +13,194 @@ std::chrono::steady_clock::time_point startTime;
 
 void startTimer()
 {
-    if (!running)
-    {
-        running = true;
-        startTime = std::chrono::steady_clock::now();
-    }
+if (!running)
+{
+running = true;
+startTime = std::chrono::steady_clock::now();
+}
 }
 
 void stopTimer()
 {
-    if (running)
-    {
-        running = false;
-        elapsed += std::chrono::duration<double>(
-            std::chrono::steady_clock::now() - startTime).count();
-    }
+if (running)
+{
+running = false;
+elapsed += std::chrono::duration<double>(
+std::chrono::steady_clock::now() - startTime).count();
+}
 }
 
 void resetTimer()
 {
-    running = false;
-    elapsed = 0.0;
+running = false;
+elapsed = 0.0;
 }
 
 double getTime()
 {
-    if (!running) return elapsed;
+if (!running) return elapsed;
 
-    return elapsed + std::chrono::duration<double>(
-        std::chrono::steady_clock::now() - startTime).count();
+
+return elapsed + std::chrono::duration<double>(
+    std::chrono::steady_clock::now() - startTime).count();
+
+
 }
 
 std::string formatTime(double seconds)
 {
-    int hrs = seconds / 3600;
-    int mins = ((int)seconds % 3600) / 60;
-    int secs = (int)seconds % 60;
-    int ms = (seconds - (int)seconds) * 1000;
+int hrs = seconds / 3600;
+int mins = ((int)seconds % 3600) / 60;
+int secs = (int)seconds % 60;
+int ms = (seconds - (int)seconds) * 1000;
 
-    std::stringstream ss;
-    ss << std::setfill('0')
-       << std::setw(2) << hrs << ":"
-       << std::setw(2) << mins << ":"
-       << std::setw(2) << secs << "."
-       << std::setw(3) << ms;
 
-    return ss.str();
+std::stringstream ss;
+ss << std::setfill('0')
+   << std::setw(2) << hrs << ":"
+   << std::setw(2) << mins << ":"
+   << std::setw(2) << secs << "."
+   << std::setw(3) << ms;
+
+return ss.str();
+
+
 }
 
 int main()
 {
-    glfwInit();
+glfwInit();
 
-    GLFWwindow* window = glfwCreateWindow(1000, 600, "C++ GUI Stopwatch", NULL, NULL);
-    glfwMakeContextCurrent(window);
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
+GLFWwindow* window = glfwCreateWindow(1000, 600, "Stopwatch", NULL, NULL);
+glfwMakeContextCurrent(window);
 
-    ImGuiIO& io = ImGui::GetIO();
+IMGUI_CHECKVERSION();
+ImGui::CreateContext();
 
-    io.Fonts->AddFontFromFileTTF(
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        42
-    );
+ImGuiIO& io = ImGui::GetIO();
 
-    ImGui::GetStyle().ScaleAllSizes(1.8f);
+io.Fonts->AddFontFromFileTTF(
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+    42
+);
 
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 130");
+ImGui_ImplGlfw_InitForOpenGL(window, true);
+ImGui_ImplOpenGL3_Init("#version 130");
 
-    while (!glfwWindowShouldClose(window))
-    {
-        glfwPollEvents();
+while (!glfwWindowShouldClose(window))
+{
+    glfwPollEvents();
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 
-        ImGui::Begin("C++ Stopwatch Project");
+    /* FULLSCREEN UI */
 
-        double t = getTime();
+    ImGui::SetNextWindowPos(ImVec2(0,0));
+    ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
 
-        ImVec2 window_size = ImGui::GetWindowSize();
+    ImGui::Begin("Main",
+    NULL,
+    ImGuiWindowFlags_NoDecoration |
+    ImGuiWindowFlags_NoMove |
+    ImGuiWindowFlags_NoResize);
 
-        ImGui::SetCursorPosX(window_size.x * 0.25);
-        // ImGui::Text("C++ GUI Stopwatch");
+    ImVec2 window_size = ImGui::GetWindowSize();
+    double t = getTime();
 
-        ImGui::SetCursorPosX(window_size.x * 0.18);
-        // ImGui::Text("Artificial Intelligence Programming Project");
+    /* CENTER TIMER */
 
-        ImGui::Spacing();
-        ImGui::Spacing();
+    float centerY = window_size.y * 0.35f;
+    ImGui::SetCursorPosY(centerY);
 
-        ImGui::SetCursorPosX(window_size.x * 0.20);
+    ImGui::SetWindowFontScale(2.3f);
 
-        ImGui::SetWindowFontScale(2.3f);
-        ImGui::Text("%s", formatTime(t).c_str());
-        ImGui::SetWindowFontScale(1.0f);
+    std::string timeText = formatTime(t);
+    float textWidth = ImGui::CalcTextSize(timeText.c_str()).x;
 
-        ImGui::Spacing();
-        ImGui::Spacing();
+    ImGui::SetCursorPosX((window_size.x - textWidth) * 0.5f);
+    ImGui::Text("%s", timeText.c_str());
 
-        ImGui::SetCursorPosX(window_size.x * 0.22);
+    ImGui::SetWindowFontScale(1.0f);
 
-        if (ImGui::Button("Start"))
-            startTimer();
+    ImGui::Spacing();
+    ImGui::Spacing();
 
-        ImGui::SameLine();
+    /* CENTER BUTTONS */
 
-        if (ImGui::Button("Stop"))
-            stopTimer();
+    float buttonWidth = 120;
+    float spacing = 20;
+    float totalWidth = buttonWidth * 3 + spacing * 2;
 
-        ImGui::SameLine();
+    ImGui::SetCursorPosX((window_size.x - totalWidth) * 0.5f);
 
-        if (ImGui::Button("Reset"))
-            resetTimer();
+    if (ImGui::Button("Start", ImVec2(buttonWidth,40)))
+        startTimer();
 
-        ImGui::Spacing();
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
+    ImGui::SameLine(0, spacing);
 
-        ImGui::SetCursorPosX(window_size.x * 0.12);
-        ImGui::Text("Under supervision of Prof. Tamer Medhat");
+    if (ImGui::Button("Stop", ImVec2(buttonWidth,40)))
+        stopTimer();
 
-        ImGui::SetCursorPosX(window_size.x * 0.20);
-        ImGui::Text("Faculty of Artificial Intelligence");
+    ImGui::SameLine(0, spacing);
 
-        ImGui::End();
+    if (ImGui::Button("Reset", ImVec2(buttonWidth,40)))
+        resetTimer();
 
-        ImGui::Render();
+    /* MOVE FOOTER TO BOTTOM */
 
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
+    float footerStart = window_size.y - 120;
+    ImGui::SetCursorPosY(footerStart);
 
-        glViewport(0, 0, display_w, display_h);
-        glClear(GL_COLOR_BUFFER_BIT);
+    ImGui::Separator();
+    ImGui::Spacing();
+    /* SMALL FOOTER */
 
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    ImGui::SetWindowFontScale(0.8f);
 
-        glfwSwapBuffers(window);
-    }
+    const char* line1 = "Supervised by";
+    const char* line2 = "Prof. Tamer Medhat";
+    const char* line3 = "Faculty of Artificial Intelligence";
 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+    float w1 = ImGui::CalcTextSize(line1).x;
+    float w2 = ImGui::CalcTextSize(line2).x;
+    float w3 = ImGui::CalcTextSize(line3).x;
 
-    glfwTerminate();
+    ImGui::SetCursorPosX((window_size.x - w1) * 0.5f);
+    ImGui::Text("%s", line1);
 
-    return 0;
+    ImGui::SetCursorPosX((window_size.x - w2) * 0.5f);
+    ImGui::Text("%s", line2);
+
+    ImGui::SetCursorPosX((window_size.x - w3) * 0.5f);
+    ImGui::Text("%s", line3);
+
+    ImGui::SetWindowFontScale(1.0f);
+
+    ImGui::End();
+
+    ImGui::Render();
+
+    int display_w, display_h;
+    glfwGetFramebufferSize(window, &display_w, &display_h);
+
+    glViewport(0, 0, display_w, display_h);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    glfwSwapBuffers(window);
+}
+
+ImGui_ImplOpenGL3_Shutdown();
+ImGui_ImplGlfw_Shutdown();
+ImGui::DestroyContext();
+
+glfwTerminate();
+
+return 0;
+
+
 }
