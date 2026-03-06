@@ -12,38 +12,22 @@ The application provides a clean graphical interface with **Start**, **Stop**, a
 
 <img src="screenshots/stopwatch.png" alt="Stopwatch Application Screenshot"/>
 
-> *Screenshot of the stopwatch GUI running.*
-
-Place your screenshot file here:
-
-```
-screenshots/stopwatch.png
-```
-
-Recommended repository structure:
-
-```
-cpp-stopwatch
-│
-├── main.cpp
-├── imgui/
-├── screenshots/
-│   └── stopwatch.png
-├── Makefile
-└── README.md
-```
-
 ---
-
-# Features
-
-* Real-time stopwatch timer
-* Start / Stop / Reset functionality
-* Simple graphical interface
-* Centered UI layout
-* Lightweight C++ implementation
-* Cross-platform support (Linux / Windows)
-
+# Project Structure
+```
+CPP-GUI-Stopwatch
+│
+├── imgui/                 # Dear ImGui library source files
+│
+├── screenshots/           
+│   └── stopwatch.png
+│
+├── main.cpp               # Main application source code
+├── Makefile               # Build automation script
+├── README.md              # Project documentation
+├── imgui.ini              # Dear ImGui configuration file
+└── stopwatch              # Compiled executable (Linux binary)
+```
 ---
 
 # Technologies Used
@@ -135,7 +119,3 @@ stopwatch.exe
 
 ---
 THX
-
-# License
-
-This project is intended for educational purposes.
