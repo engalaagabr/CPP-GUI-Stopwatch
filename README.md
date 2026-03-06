@@ -10,7 +10,7 @@ The application provides a clean graphical interface with **Start**, **Stop**, a
 
 # Screenshot
 
-<img src="screenshots/stopwatch.png" alt="Stopwatch Application Screenshot" width="700"/>
+<img src="screenshots/stopwatch.png" alt="Stopwatch Application Screenshot"/>
 
 > *Screenshot of the stopwatch GUI running.*
 
@@ -68,7 +68,7 @@ sudo apt install build-essential libglfw3-dev libgl1-mesa-dev
 ## Clone the Repository
 
 ```
-git clone https://github.com/your-username/cpp-stopwatch.git
+git clone https://github.com/engalaagabr/CPP-GUI-Stopwatch.git
 cd cpp-stopwatch
 ```
 
@@ -134,16 +134,7 @@ stopwatch.exe
 ```
 
 ---
-
-# Author
-
-Developed as a C++ GUI programming project.
-
-Supervised by
-**Prof. Tamer Medhat**
-Faculty of Artificial Intelligence
-
----
+THX
 
 # License
 
